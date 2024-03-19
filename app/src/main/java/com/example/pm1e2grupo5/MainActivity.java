@@ -28,6 +28,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pm1e2grupo5.Modelo.Contactos;
 import com.example.pm1e2grupo5.Modelo.RestApiMethods;
+
+import com.example.pm1e2grupo5.Modelo.RestApiMethodsL;
+import com.example.pm1e2grupo5.Validations.GeolocationValidation;
+import com.example.pm1e2grupo5.Validations.NameValidations;
+import com.example.pm1e2grupo5.Validations.PhoneValidations;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -40,6 +45,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,10 +70,14 @@ public class MainActivity extends AppCompatActivity {
         btncontatosS = findViewById(R.id.btncontatosS);
         dibujar = findViewById(R.id.lienzo);
 
+        txtNombre.addTextChangedListener(new NameValidations(txtNombre));
+        txtTelefono.addTextChangedListener(new PhoneValidations(txtTelefono));
+        txtLatitud.addTextChangedListener(new GeolocationValidation(txtLatitud, txtLongitud));
+
         Intent intent = getIntent();
         if (intent.hasExtra("contactoId")) {
             txtNombre.setText(intent.getStringExtra("nombre"));
-            txtTelefono.setText(String.valueOf(intent.getIntExtra("telefono", 0)));
+            txtTelefono.setText(intent.getStringExtra("telefono"));
             txtLatitud.setText(intent.getStringExtra("latitud"));
             txtLongitud.setText(intent.getStringExtra("longitud"));
         }
@@ -80,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getLocation();
         }
+
 
         txtLatitud.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void validarDatos() {
+
+        /*
         if (txtNombre.getText().toString().isEmpty() ||
                 txtTelefono.getText().toString().isEmpty() ||
                 txtLatitud.getText().toString().isEmpty() ||
@@ -129,51 +144,103 @@ public class MainActivity extends AppCompatActivity {
             // Si hay un contactoId, actualiza el contacto, de lo contrario, crea uno nuevo
             int contactoId = getIntent().getIntExtra("contactoId", 0);
             String firmaBase64 = dibujar.convertirFirmaABase64();
-            Contactos nuevoContacto = new Contactos(contactoId, txtNombre.getText().toString(), Integer.parseInt(txtTelefono.getText().toString()), txtLatitud.getText().toString(), txtLongitud.getText().toString(),firmaBase64);
-            SendData(nuevoContacto);
+            Contactos nuevoContacto = new Contactos(contactoId, txtNombre.getText().toString(),
+            Integer.parseInt(txtTelefono.getText().toString()), txtLatitud.getText().toString(), txtLongitud.getText().toString(),firmaBase64);
+
+
+
         }
+
+        */
+
+        SendData();
     }
 
-    private void SendData(Contactos person) {
+    private static boolean isValidBase64(String input) {
+        return Pattern.matches("^[a-zA-Z0-9+/]*={0,2}$", input);
+    }
+
+    private void SendData() {
         requestQueue = Volley.newRequestQueue(this);
+
+        Contactos contactos = new Contactos();
+
+        int contactoId = getIntent().getIntExtra("contactoId", 0);
+        String firmaBase64 = dibujar.convertirFirmaABase64();
+
+        String nombre = Objects.requireNonNull(txtNombre.getText()).toString();
+        String telefono = Objects.requireNonNull(txtTelefono.getText()).toString();
+        String latitud = Objects.requireNonNull(txtLatitud.getText()).toString();
+        String longitud = Objects.requireNonNull(txtLongitud.getText()).toString();
+
+        Predicate<String> nombreValidator = input -> input.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+");
+        Predicate<String> telefonoValidator = input -> input.matches("\\+504\\d{8}");
+        Predicate<String> latitudValidator = input -> input.matches("-?\\d+(\\.\\d+)?");
+        Predicate<String> longitudValidator = input -> input.matches("-?\\d+(\\.\\d+)?");
+        Predicate<String> firmaBase64Validator = input -> isValidBase64(input);
+
+
+        boolean isBase54 = firmaBase64.equals("");
+        if (isBase54) {
+            Toast.makeText(getApplicationContext(), "Firma Invalida, Debes firmar por huevos.",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!nombreValidator.test(nombre)) {
+            txtNombre.setError("Nombre inválido. Debe contener solo letras y espacios.");
+            return;
+        }
+
+        if (!telefonoValidator.test(telefono)) {
+            txtTelefono.setError("Número de teléfono inválido. Debe estar en formato +504XXXXXXXX.");
+            return;
+        }
+
+        if (!latitudValidator.test(latitud)) {
+            txtLatitud.setError("Latitud inválida. Debe ser un número decimal.");
+            return;
+        }
+
+        if (!longitudValidator.test(longitud)) {
+            txtLongitud.setError("Longitud inválida. Debe ser un número decimal.");
+            return;
+        }
+
+        Contactos nuevoContacto = new Contactos(contactoId, nombre,
+                                                   telefono, latitud,
+                                                longitud,firmaBase64);
+
 
         JSONObject jsonperson = new JSONObject();
 
         try {
-            jsonperson.put("contactoId", person.getContactoId());
-            jsonperson.put("nombre", person.getNombre());
-            jsonperson.put("telefono", person.getTelefono());
-            jsonperson.put("latitud", person.getLatitud());
-            jsonperson.put("longitud", person.getLongitud());
-            jsonperson.put("firma", person.getFirma());
+            jsonperson.put("contactoId", nuevoContacto.getContactoId());
+            jsonperson.put("nombre", nuevoContacto.getNombre());
+            jsonperson.put("telefono", nuevoContacto.getTelefono());
+            jsonperson.put("latitud", nuevoContacto.getLatitud());
+            jsonperson.put("longitud", nuevoContacto.getLongitud());
+            jsonperson.put("firma", nuevoContacto.getFirma());
         } catch (JSONException ex) {
             ex.printStackTrace();
         }
 
         String endpoint;
-        if (person.getContactoId() != 0) {
+        if (nuevoContacto.getContactoId() != 0) {
             endpoint = RestApiMethods.EndpointUpdateContacto;
         } else {
             endpoint = RestApiMethods.EndpointPostContacto;
         }
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                endpoint, jsonperson, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    String mensaje = response.getString("messaje");
-                    Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG).show();
-                } catch (JSONException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+                endpoint, jsonperson, response -> {
+                    try {
+                        String mensaje = response.getString("messaje");
+                        Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG).show();
+                    } catch (JSONException ex) {
+                        ex.printStackTrace();
+                    }
+                }, error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show());
 
         requestQueue.add(request);
         limpiarCampos();
