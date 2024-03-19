@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra("contactoId")) {
             txtNombre.setText(intent.getStringExtra("nombre"));
-            txtTelefono.setText(String.valueOf(intent.getIntExtra("telefono", 0)));
+            txtTelefono.setText(intent.getStringExtra("telefono"));
             txtLatitud.setText(intent.getStringExtra("latitud"));
             txtLongitud.setText(intent.getStringExtra("longitud"));
         }
@@ -133,25 +133,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void validarDatos() {
-
-        /*
-        if (txtNombre.getText().toString().isEmpty() ||
-                txtTelefono.getText().toString().isEmpty() ||
-                txtLatitud.getText().toString().isEmpty() ||
-                txtLongitud.getText().toString().isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Todos los campos son requeridos", Toast.LENGTH_LONG).show();
-        } else {
-            // Si hay un contactoId, actualiza el contacto, de lo contrario, crea uno nuevo
-            int contactoId = getIntent().getIntExtra("contactoId", 0);
-            String firmaBase64 = dibujar.convertirFirmaABase64();
-            Contactos nuevoContacto = new Contactos(contactoId, txtNombre.getText().toString(),
-            Integer.parseInt(txtTelefono.getText().toString()), txtLatitud.getText().toString(), txtLongitud.getText().toString(),firmaBase64);
-
-
-
-        }
-
-        */
 
         SendData();
     }

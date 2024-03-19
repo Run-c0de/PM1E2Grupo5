@@ -45,7 +45,15 @@ public class PhoneValidations implements TextWatcher {
                 txtTelefono.setError("El número de teléfono no puede exceder " + MAX_LENGTH + " caracteres.");
 
                 new Handler().postDelayed(() -> txtTelefono.post(() -> txtTelefono.setError(null)), 2000);
-            } else {
+            }
+            else if(input.length() < MAX_LENGTH){
+
+                txtTelefono.setSelection(input.length() );
+                txtTelefono.setError("El número de teléfono no puede tener menoz de " + MAX_LENGTH + " caracteres.");
+
+
+            }
+            else {
                 txtTelefono.setError(null);
             }
         }
