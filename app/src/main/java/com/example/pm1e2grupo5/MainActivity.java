@@ -208,9 +208,9 @@ public class MainActivity extends AppCompatActivity {
 
         String endpoint;
         if (nuevoContacto.getContactoId() != 0) {
-            endpoint = RestApiMethodsL.EndpointUpdateContacto;
+            endpoint = RestApiMethods.EndpointUpdateContacto;
         } else {
-            endpoint = RestApiMethodsL.EndpointPostContacto;
+            endpoint = RestApiMethods.EndpointPostContacto;
         }
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,

@@ -88,8 +88,8 @@ public class ContactosActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .build();
-        //String baseUrl = "http://192.168.0.14/PM1E2Grupo5Api/";
-        String baseUrl = "http://172.30.0.2/";
+        String baseUrl = "http://192.168.0.14/PM1E2Grupo5Api/";
+        //String baseUrl = "http://172.30.0.2/";
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)

@@ -59,7 +59,7 @@ public class ContactosAdapter extends ArrayAdapter<Contactos> {
         final Contactos contacto = contactosList.get(position);
         holder.idTextView.setText("ID: " + contacto.getContactoId());
         holder.nombreTextView.setText(contacto.getNombre());
-        holder.telefonoTextView.setText(String.valueOf(contacto.getTelefono()));
+        holder.telefonoTextView.setText(contacto.getTelefono());
         holder.latitudTextView.setText(contacto.getLatitud());
         holder.longitudTextView.setText(contacto.getLongitud());
 
