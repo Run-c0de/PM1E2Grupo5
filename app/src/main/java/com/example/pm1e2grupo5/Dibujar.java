@@ -3,6 +3,7 @@ package com.example.pm1e2grupo5;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
@@ -93,6 +94,8 @@ public class Dibujar extends View {
         invalidate(); // Invalida el View para que se redibuje
         borrar = true; // Se establece en verdadero ya que se está borrando
     }
+
+    /*
     public String convertirFirmaABase64() {
         Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -101,5 +104,34 @@ public class Dibujar extends View {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    } */
+
+    public String convertirFirmaABase64() {
+        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        draw(canvas);
+
+        if (isBitmapEmpty(bitmap)) {
+            return "";
+        }
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
+
+    private boolean isBitmapEmpty(Bitmap bitmap) {
+        int backgroundColor = Color.parseColor("#C1BEBE"); // Convertir el color de fondo a un entero
+
+        for (int x = 0; x < bitmap.getWidth(); x++) {
+            for (int y = 0; y < bitmap.getHeight(); y++) {
+                if (bitmap.getPixel(x, y) != backgroundColor) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }

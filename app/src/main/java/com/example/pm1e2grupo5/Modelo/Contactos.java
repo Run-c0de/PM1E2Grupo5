@@ -3,12 +3,12 @@ package com.example.pm1e2grupo5.Modelo;
 public class Contactos {
     private int contactoId;
     private String nombre;
-    private int telefono;
+    private String telefono;
     private String latitud;
     private String longitud;
     private String firma;
 
-    public Contactos(int contactoId, String nombre, int telefono, String latitud, String longitud, String firma) {
+    public Contactos(int contactoId, String nombre, String telefono, String latitud, String longitud, String firma) {
         this.contactoId = contactoId;
         this.nombre = nombre;
         this.telefono = telefono;
@@ -38,11 +38,11 @@ public class Contactos {
         this.nombre = nombre;
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
