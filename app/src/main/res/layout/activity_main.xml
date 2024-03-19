@@ -1,0 +1,169 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#75BC2B"
+    tools:context=".MainActivity"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_del_examem" />
+
+    <com.example.pm1e2grupo5.Dibujar
+        android:id="@+id/lienzo"
+        android:layout_width="400dp"
+        android:layout_height="159dp"
+        android:layout_below="@id/logo"
+        android:layout_marginTop="17dp"
+
+        android:background="#C1BEBE"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.215" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLimpiarfirma"
+
+        android:layout_width="326dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/lienzo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#191818"
+        android:text="limpiar Firma" />
+
+    <!-- Text Input Layout -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="398dp"
+        android:layout_height="88dp"
+        android:hint="Ingrese su Nombre"
+        android:layout_below="@+id/btnLimpiarfirma"
+        android:layout_marginTop="10dp"
+        app:boxBackgroundColor="#FAF5F5"
+        app:boxStrokeColor="#100F0F"
+        app:boxStrokeWidth="2dp"
+        app:endIconMode="clear_text"
+        app:helperTextTextColor="#FF0000"
+        app:startIconDrawable="@drawable/ic_person"
+        app:startIconTint="#131313">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Text Input Layout para el teléfono -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="398dp"
+        android:layout_height="wrap_content"
+        android:hint="Ingrese su Teléfono"
+        app:boxBackgroundColor="#E8E5E5"
+        app:boxStrokeColor="#100F0F"
+        android:layout_marginTop="405dp"
+        app:boxStrokeWidth="2dp"
+        app:endIconMode="clear_text"
+        app:helperTextTextColor="#FF0000"
+        app:startIconDrawable="@drawable/ic_phone"
+        app:startIconTint="#131313">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <!-- Text Input Layout para la latitud -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="398dp"
+        android:layout_height="wrap_content"
+        android:hint="Ingrese la Latitud"
+
+        android:layout_marginTop="485dp"
+        app:boxBackgroundColor="#E8E5E5"
+        app:boxStrokeColor="#100F0F"
+        app:boxStrokeWidth="2dp"
+        app:endIconMode="clear_text"
+        app:helperTextTextColor="#FF0000"
+        app:startIconDrawable="@drawable/ic_location"
+        app:startIconTint="#131313">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtLatitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Text Input Layout para la longitud -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="398dp"
+        android:layout_height="wrap_content"
+        android:hint="Ingrese la Longitud"
+        app:boxBackgroundColor="#E1DCDC"
+        app:boxStrokeColor="#100F0F"
+        app:boxStrokeWidth="2dp"
+        android:layout_marginTop="560dp"
+        app:endIconMode="clear_text"
+        app:helperTextTextColor="#FF0000"
+        app:startIconDrawable="@drawable/ic_location"
+        app:startIconTint="#131313">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtLongitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:inputType="numberDecimal"
+            android:focusableInTouchMode="false"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSalvarG"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="#0E0E0E"
+            android:onClick="RegistroData"
+            android:text="Salvar Contacto"
+            android:textColor="@color/white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btncontatosS"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="#100F10"
+            android:text="Contactos Salvados"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</RelativeLayout>
